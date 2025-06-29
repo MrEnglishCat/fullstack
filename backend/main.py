@@ -1,8 +1,4 @@
-import math
-from urllib.parse import ParseResult
-
 import uvicorn
-from urllib import parse
 from fastapi import FastAPI, Depends, Query, HTTPException
 from fastapi.responses import RedirectResponse
 
