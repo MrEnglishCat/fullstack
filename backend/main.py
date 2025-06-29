@@ -1,7 +1,9 @@
 import math
+from urllib.parse import ParseResult
 
 import uvicorn
-from fastapi import FastAPI, Depends, Query
+from urllib import parse
+from fastapi import FastAPI, Depends, Query, HTTPException
 from fastapi.responses import RedirectResponse
 
 from sqlalchemy import select, and_, or_, desc, asc, func
@@ -74,6 +76,10 @@ async def get_products(value: str, db: Session = Depends(get_db)):
 
 @app.get("/api/run_parser")
 async def get_run_parser(url: str):
+
+    if "www" not in url or "http" not in url:
+        return HTTPException(status_code=404, detail="Неверная ссылка.")
+
     wb = WB(user_input=url)
     wb.run()
     try:

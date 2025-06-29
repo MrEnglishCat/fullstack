@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import {useState} from "react";
 import RangeSlider from "@/components/slider/templateSlider";
 import FilterMinRating from "@/components/FilterMinRating/FilterMinRating";
 import FilterMinReview from "@/components/FilterMinReview/FilterMinReview";
@@ -31,8 +31,15 @@ export default function Home() {
                 throw new Error("Ошибка при запуске парсера");
             }
 
+
+
             const data = await response.json();
+
+            if (data.status_code == 404) {
+                throw new Error(data.detail || data.message)
+            }
             console.log(data);
+
             setSuccess("Парсер успешно запущен!");
         } catch (err) {
             setError(err.message || "Не удалось запустить парсер");
@@ -69,13 +76,16 @@ export default function Home() {
             </button>
 
             {error && (
-                <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                     role="alert">
                     <span className="font-medium">Ошибка:</span> {error}
                 </div>
             )}
 
             {success && (
-                <div className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+                <div
+                    className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                    role="alert">
                     <span className="font-medium">Успех:</span> {success}
                 </div>
             )}

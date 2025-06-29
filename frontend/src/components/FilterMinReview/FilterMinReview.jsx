@@ -4,11 +4,11 @@ import {useState, useEffect} from "react";
 import styles from "@/components/FilterMinRating/FilterMinRating.module.css"
 
 
-export default function FilterMinReview({minReviews, setMinReviews, setCurrentPage}) {
+export default function FilterMinReview({minReviews, setMinReviews, setCurrentPage=()=>{}}) {
 
 
     const handleChange = (e) => {
-        const value = parseFloat(e.target.value);
+        const value = parseFloat(e.target.value || 0);
         setMinReviews(value);
         setCurrentPage(1)
 
