@@ -10,4 +10,4 @@ class ProductCardDTO(BaseModel):
     review_count: int = Field(alias='review_count')
 
     class Config:
-        orm_mode = True
+        from_attributes = True

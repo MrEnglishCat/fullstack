@@ -37,8 +37,7 @@ export default function Home() {
                 );
                 if (!res.ok) throw new Error("Ошибка загрузки данных");
                 const data = await res.json();
-                console.log(data)
-                setProducts(data.items);
+                setProducts(data);
             } catch (err) {
                 setError(err.message);
             } finally {

@@ -10,7 +10,8 @@ export default function RangeSlider({
                                         setPriceRange,
                                         step,
                                         setStep,
-                                        setCurrentPage
+                                        setCurrentPage = () => {
+                                        }
                                     }) {
     const [initialized, setInitialized] = useState(false);
 
@@ -18,7 +19,6 @@ export default function RangeSlider({
         if (!rangeValues || typeof rangeValues !== "object") return;
 
         const {min_value, max_value} = rangeValues;
-        console.log("{min_value, max_value}", min_value, max_value)
         if (typeof min_value !== "number" || typeof max_value !== "number") return;
 
         const safeMin = min_value;

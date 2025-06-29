@@ -96,7 +96,7 @@ async def get_products(
         order_by: str = "name",
         is_statistic:bool = False,
         db: SessionLocal = Depends(get_db),
-)->Page[ProductCardDTO]:
+)->Page[ProductCardDTO] | list[ProductCardDTO]:
     allowed_order_fields = {
         "name": ProductCard.name,
         "price": ProductCard.price,
@@ -125,7 +125,9 @@ async def get_products(
     ).order_by(order_by)
     if not is_statistic:
         return paginate(db, slt)
-    return db.scalar(slt)
+
+    print("ADSADSASDADSADADS")
+    return db.scalars(slt)
 
 
 if __name__ == "__main__":
