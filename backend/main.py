@@ -1,3 +1,5 @@
+from typing import List
+
 import uvicorn
 from fastapi import FastAPI, Depends, Query, HTTPException
 from fastapi.responses import RedirectResponse
@@ -10,7 +12,7 @@ from backend.parser.WB import WB
 from backend.parser.db import ProductCard, engine, SessionLocal
 
 from fastapi_pagination.ext.sqlalchemy import paginate
-from fastapi_pagination import Page, add_pagination
+from fastapi_pagination import Page, add_pagination, Params
 
 from backend.parser.dto import ProductCardDTO
 
@@ -90,15 +92,16 @@ async def get_run_parser(url: str):
 @app.get("/api/products")
 async def get_products(
         # page: int = 1,
-        min_price: float = Query(default=0.0, description="Минимальная цена", ge=0.0, le=69087.15),
-        max_price: float = Query(default=69087.15, description="Максимальная цена", ge=0.0, le=69087.15),
+        min_price: float = Query(default=0.0, description="Минимальная цена", ge=0.0, ),
+        max_price: float = Query(default=69087.15, description="Максимальная цена", ge=0.0),
         rating_from: float = Query(default=0.0, description="Показать с рейтингом выше чем", ge=0.0, le=5.0),
         min_review_count: int = Query(default=0, description="Минимальное количество отзывов", ge=0.0),
         # max_review_count: int = Query(default=10000, description="Максимальное количество отзывов", ge=0.0),
         order_by: str = "name",
         is_statistic:bool = False,
         db: SessionLocal = Depends(get_db),
-)->Page[ProductCardDTO] | list[ProductCardDTO]:
+        params: Params = Depends(),
+)->Page[ProductCardDTO] | List[ProductCardDTO]:
     allowed_order_fields = {
         "name": ProductCard.name,
         "price": ProductCard.price,
@@ -114,11 +117,12 @@ async def get_products(
     else:
         order_column = allowed_order_fields.get(order_by)
         order_by = asc(order_column) if order_column else asc(ProductCard.name)
-
     slt = select(ProductCard).where(
         and_(
-            and_(ProductCard.price >= min_price, ProductCard.price <= max_price),
-            and_(ProductCard.sale_price >= min_price, ProductCard.sale_price <= max_price),
+            or_(
+                and_(ProductCard.price >= min_price, ProductCard.price <= max_price),
+                and_(ProductCard.sale_price >= min_price, ProductCard.sale_price <= max_price),
+            ),
             ProductCard.rating >= rating_from,
             ProductCard.review_count >= min_review_count,
 
@@ -126,10 +130,9 @@ async def get_products(
 
     ).order_by(order_by)
     if not is_statistic:
-        return paginate(db, slt)
+        return  paginate(db, slt, params)
 
-    print("ADSADSASDADSADADS")
-    return db.scalars(slt)
+    return db.execute(slt).scalars().all()
 
 
 if __name__ == "__main__":

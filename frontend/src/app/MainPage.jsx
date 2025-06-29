@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import RangeSlider from "@/components/slider/templateSlider";
 import FilterMinRating from "@/components/FilterMinRating/FilterMinRating";
 import FilterMinReview from "@/components/FilterMinReview/FilterMinReview";
-import { fetchRangeValues } from "@/utils/utils";
+import {fetchRangeValues} from "@/utils/utils";
 
 export default function Product() {
     const [products, setProducts] = useState([]);
@@ -17,7 +17,7 @@ export default function Product() {
     const [orderByRating, setOrderByRating] = useState("rating");
     const [orderByReview, setOrderByReview] = useState("review_count");
 
-    const [activeSortField, setActiveSortField] = useState(null);
+    const [activeSortField, setActiveSortField] = useState("name");
     const [minRating, setMinRating] = useState(4);
     const [rangeValues, setRangeValue] = useState({});
     const [priceValues, setPriceValues] = useState([0.0, 10.0]);
@@ -57,6 +57,7 @@ export default function Product() {
                 `http://localhost:8000/api/products?order_by=${activeSortField}&min_price=${priceValues[0]}&max_price=${priceValues[1]}&rating_from=${minRating}&min_review_count=${minReviews}&page=${currentPage}&size=${itemsPerPage}`
             );
             const data = await res.json();
+            console.log(data)
             setProducts(data.items || []);
             setTotalPages(data.pages || 1);
         };
@@ -94,7 +95,6 @@ export default function Product() {
 
     return (
         <div className="flex flex-col gap-10">
-            {/* Фильтры */}
             <div className="flex flex-row gap-5 space-x-1">
                 <RangeSlider
                     rangeValues={rangeValues}
@@ -117,7 +117,6 @@ export default function Product() {
                     setCurrentPage={setCurrentPage}
                 />
 
-                {/* Выбор количества элементов на странице */}
                 <div className="flex items-end">
                     <label htmlFor="itemsPerPage" className="block text-sm font-medium text-gray-700 mr-2">
                         На странице:
@@ -135,47 +134,56 @@ export default function Product() {
                 </div>
             </div>
 
-            {/* Таблица */}
             <table className="table-auto w-full text-center">
                 <thead className="bg-blue-600 text-white">
-                    <tr>
-                        <th onClick={() => changeOrderOnClick(orderByName, setOrderByName)} className="hover:cursor-pointer">
-                            Название {activeSortField === orderByName && <span>{orderByName.startsWith("-") ? "🔽" : "🔼"}</span>}
-                        </th>
-                        <th onClick={() => changeOrderOnClick(orderByPrice, setOrderByPrice)} className="hover:cursor-pointer">
-                            Цена {activeSortField === orderByPrice && <span>{orderByPrice.startsWith("-") ? "🔽" : "🔼"}</span>}
-                        </th>
-                        <th onClick={() => changeOrderOnClick(orderBySalePrice, setOrderBySalePrice)} className="hover:cursor-pointer">
-                            Цена со скидкой {activeSortField === orderBySalePrice && <span>{orderBySalePrice.startsWith("-") ? "🔽" : "🔼"}</span>}
-                        </th>
-                        <th onClick={() => changeOrderOnClick(orderByRating, setOrderByRating)} className="hover:cursor-pointer">
-                            Рейтинг {activeSortField === orderByRating && <span>{orderByRating.startsWith("-") ? "🔽" : "🔼"}</span>}
-                        </th>
-                        <th onClick={() => changeOrderOnClick(orderByReview, setOrderByReview)} className="hover:cursor-pointer">
-                            Отзывы {activeSortField === orderByReview && <span>{orderByReview.startsWith("-") ? "🔽" : "🔼"}</span>}
-                        </th>
-                    </tr>
+                <tr>
+                    <th onClick={() => changeOrderOnClick(orderByName, setOrderByName)}
+                        className="hover:cursor-pointer">
+                        Название {activeSortField === orderByName &&
+                        <span>{orderByName.startsWith("-") ? "🔽" : "🔼"}</span>}
+                    </th>
+                    <th onClick={() => changeOrderOnClick(orderByPrice, setOrderByPrice)}
+                        className="hover:cursor-pointer">
+                        Цена {activeSortField === orderByPrice &&
+                        <span>{orderByPrice.startsWith("-") ? "🔽" : "🔼"}</span>}
+                    </th>
+                    <th onClick={() => changeOrderOnClick(orderBySalePrice, setOrderBySalePrice)}
+                        className="hover:cursor-pointer">
+                        Цена со скидкой {activeSortField === orderBySalePrice &&
+                        <span>{orderBySalePrice.startsWith("-") ? "🔽" : "🔼"}</span>}
+                    </th>
+                    <th onClick={() => changeOrderOnClick(orderByRating, setOrderByRating)}
+                        className="hover:cursor-pointer">
+                        Рейтинг {activeSortField === orderByRating &&
+                        <span>{orderByRating.startsWith("-") ? "🔽" : "🔼"}</span>}
+                    </th>
+                    <th onClick={() => changeOrderOnClick(orderByReview, setOrderByReview)}
+                        className="hover:cursor-pointer">
+                        Отзывы {activeSortField === orderByReview &&
+                        <span>{orderByReview.startsWith("-") ? "🔽" : "🔼"}</span>}
+                    </th>
+                </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-700 bg-gray-900 text-white">
-                    {Array.isArray(products) && products.length > 0 ? (
-                        products.map((product) => (
-                            <tr key={product.id} className="hover:bg-blue-300 hover:text-gray-900 transition-colors duration-200 cursor-pointer">
-                                <td className="px-6 py-4 whitespace-nowrap text-left">{product.name}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{product.price} ₽</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-green-700">{product.sale_price} ₽</td>
-                                <td className="px-6 py-4 whitespace-nowrap">⭐ {product.rating}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{product.review_count}</td>
-                            </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan="5" className="py-4 text-center">Нет товаров для отображения</td>
+                {Array.isArray(products) && products.length > 0 ? (
+                    products.map((product) => (
+                        <tr key={product.id}
+                            className="hover:bg-blue-300 hover:text-gray-900 transition-colors duration-200 cursor-pointer">
+                            <td className="px-6 py-4 whitespace-nowrap text-left">{product.name}</td>
+                            <td className="px-6 py-4 whitespace-nowrap">{product.price} BYN</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-green-700">{product.sale_price} BYN</td>
+                            <td className="px-6 py-4 whitespace-nowrap">⭐ {product.rating}</td>
+                            <td className="px-6 py-4 whitespace-nowrap">{product.review_count}</td>
                         </tr>
-                    )}
+                    ))
+                ) : (
+                    <tr>
+                        <td colSpan="5" className="py-4 text-center">Нет товаров для отображения</td>
+                    </tr>
+                )}
                 </tbody>
             </table>
 
-            {/* Пагинация */}
             <div className="flex justify-center items-center space-x-4 mt-4">
                 <button
                     onClick={goToPrevPage}

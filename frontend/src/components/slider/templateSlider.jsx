@@ -5,6 +5,8 @@ import React, {useEffect, useState} from "react";
 import {Range} from "react-range";
 
 export default function RangeSlider({
+                                        sliderName = "Фильтр цены",
+                                        sliderId = "priceSlider",
                                         rangeValues,
                                         priceRange,
                                         setPriceRange,
@@ -22,7 +24,6 @@ export default function RangeSlider({
         if (typeof min_value !== "number" || typeof max_value !== "number") return;
 
         const safeMin = min_value;
-        // const safeMax = Math.max(max_value, safeMin + 1);
         const safeMax = max_value;
 
         setPriceRange((prev) => {
@@ -46,10 +47,10 @@ export default function RangeSlider({
 
     return (
         <div className={styles.mainWrapper}>
-            <span className="p-3">Фильтр цены</span>
+            <span className="p-3">{sliderName}</span>
             <div className="px-4">
                 <Range
-                    key="rangeSlider1"
+                    key={sliderId}
                     values={priceRange}
                     step={step}
                     min={rangeValues.min_value}
