@@ -1,17 +1,22 @@
-# Базовый образ
 FROM node:18
 
-# Рабочая директория
 WORKDIR /app
 
-# Копируем package.json и установочные файлы
+## Чистка старых данных
+#RUN rm -rf node_modules/ .next/
+
+# Копируем package.json
 COPY package*.json ./
 
 # Устанавливаем зависимости
 RUN npm install
 
-# Копируем остальные файлы
+# Копируем исходники
 COPY . .
 
-# Собираем и запускаем в одной команде
-CMD ["sh", "-c", "npm run build && npm run start"]
+## Собираем проект
+#RUN npm run build
+
+# Запуск
+#CMD ["sh", "-c", "npm run build && npm run start"]
+CMD ["sh", "-c", "npm run dev"]
