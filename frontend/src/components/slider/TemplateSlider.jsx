@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./templateSlider.module.css";
+import styles from "./TemplateSlider.module.css";
 import React, {useEffect, useState} from "react";
 import {Range} from "react-range";
 

@@ -1,18 +1,16 @@
-import json
 import os
-import random
 import time
-from pprint import pprint
 
 import requests
 from fake_useragent import UserAgent
 from urllib.parse import urlparse
 
-from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-from backend.parser.db import engine, ProductCard, Base
-from backend.parser.utils import FilesHandler
+# from backend.parser.db import engine, ProductCard, Base
+from .db import engine, ProductCard, Base
+# from backend.parser.utils import FilesHandler
+from .utils import FilesHandler
 
 
 class WB:

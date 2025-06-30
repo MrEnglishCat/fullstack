@@ -1,0 +1,17 @@
+# Базовый образ
+FROM node:18
+
+# Рабочая директория
+WORKDIR /app
+
+# Копируем package.json и установочные файлы
+COPY package*.json ./
+
+# Устанавливаем зависимости
+RUN npm install
+
+# Копируем остальные файлы
+COPY . .
+
+# Собираем и запускаем в одной команде
+CMD ["sh", "-c", "npm run build && npm run start"]

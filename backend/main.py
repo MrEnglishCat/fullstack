@@ -8,13 +8,16 @@ from sqlalchemy import select, and_, or_, desc, asc, func
 from sqlalchemy.orm import Session
 from starlette.middleware.cors import CORSMiddleware
 
-from backend.parser.WB import WB
-from backend.parser.db import ProductCard, engine, SessionLocal
+# from backend.parser.WB import WB
+from parser.WB import WB
+# from backend.parser.db import ProductCard, engine, SessionLocal
+from parser.db import ProductCard, engine, SessionLocal
 
 from fastapi_pagination.ext.sqlalchemy import paginate
 from fastapi_pagination import Page, add_pagination, Params
 
-from backend.parser.dto import ProductCardDTO
+from parser.dto import ProductCardDTO
+# from backend.parser.dto import ProductCardDTO
 
 
 def get_db():

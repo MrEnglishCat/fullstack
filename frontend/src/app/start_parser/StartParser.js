@@ -1,7 +1,7 @@
 "use client";
 
 import {useState} from "react";
-import RangeSlider from "@/components/slider/templateSlider";
+import RangeSlider from "@/components/slider/TemplateSlider";
 import FilterMinRating from "@/components/FilterMinRating/FilterMinRating";
 import FilterMinReview from "@/components/FilterMinReview/FilterMinReview";
 import PriceHistogram from '@/components/PriceHistogram/PriceHistogram';
