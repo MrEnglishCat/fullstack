@@ -18,7 +18,7 @@ GET http://localhost:8000/api/products/rangeValue
 GET http://localhost:8000/api/run_parser
 
 
-### 2 Запуск backend
+### 2 Запуск frontend
 - зайти в каталог frontend в терминале
 - установить зависимости npm install
 - прописать команды npm run build, затем npm run start для запуска сервера
